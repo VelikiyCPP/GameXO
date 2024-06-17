@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
 
 #include <iostream>
 #include <limits>
@@ -17,5 +15,3 @@ public:
 private:
 	// No private members for now
 };
-
-#endif // PLAYER_HPP

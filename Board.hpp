@@ -1,6 +1,4 @@
 #pragma once
-#ifndef BOARD_HPP
-#define BOARD_HPP
 
 #include <array>
 #include <iostream>
@@ -26,5 +24,3 @@ private:
     enum class Winners : std::size_t { OVICTORY, XVICTORY, TIE };
     static constexpr std::size_t boardSize_ = 3;
 };
-
-#endif // BOARD_HPP

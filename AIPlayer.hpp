@@ -1,12 +1,11 @@
 #pragma once
-#ifndef AIPLAYER_HPP
-#define AIPLAYER_HPP
+
+#include <chrono>
+#include <random>
+#include <thread>
+#include <utility>
 
 #include "Board.hpp"
-#include <utility>
-#include <random>
-#include <chrono>
-#include <thread>
 
 class AIPlayer {
 public:
@@ -20,5 +19,3 @@ private:
     Board* board_;
     int level_;
 };
-
-#endif // AIPLAYER_HPP

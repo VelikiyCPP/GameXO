@@ -1,52 +1,42 @@
 #pragma once
-#ifndef GAME_HPP
-#define GAME_HPP
 
-#include "Player.hpp"
-#include "AIPlayer.hpp"
-#include "Board.hpp"
-#include "Setting.hpp"
-#include "MenuItem.hpp"
-#include "Menu.hpp"
-#include "OutputInformation.hpp"
-#include <nlohmann/json.hpp>
-#include <thread>
 #include <chrono>
 #include <fstream>
+#include <nlohmann/json.hpp>
+#include <thread>
 
-namespace GameXO {
-    extern OI::OutputInformation outputInformation;
 
-    class Game {
-    public:
-        Game();
-        void loadAllMenu();
-        void updateAllMenu();
-        const VisualMenu::Menu& getMenu() const noexcept;
-        void start() noexcept;
-        void startLocalGame();
-        void settingMenu();
-        void sleep(std::time_t time);
-        void exit() noexcept;
-        void clear() noexcept;
-        ~Game();
+#include "AIPlayer.hpp"
+#include "Board.hpp"
+#include "MenuItem.hpp"
+#include "Menu.hpp"
+#include "Player.hpp"
+#include "OutputInformation.hpp"
+#include "Setting.hpp"
 
-    private:
-        Player player_;
-        AIPlayer AIPlayer_;
-        VisualMenu::Menu menu_;
-        VisualMenu::Menu menuAi_;
-        VisualMenu::Menu menuSetting_;
-        Board board_;
-        Setting setting_;
-        bool gameDeath_;
-        bool startAiGame_;
-        nlohmann::json messages_;
+extern OutputInformation outputInformation;
 
-        void loadMessages();
-        void messageJson(const std::string& key, const std::time_t time, const OI::typeMessage type = OI::typeMessage::UNKNOWN) noexcept;
-        std::string getTextFromJson(const std::string& key);
-    };
-} // namespace GameXO
+class Game {
+public:
+    Game();
+    void loadAllMenu();
+    void updateAllMenu();
+    const Menu& getMenu() const noexcept;
+    void start() noexcept;
+    void startLocalGame();
+    void settingMenu();
+    void sleep(std::time_t time);
+    void exit() noexcept;
+    void clear() noexcept;
+    std::string getJsonText(const std::string& key);
+    ~Game();
 
-#endif // GAME_HPP
+private:
+    Player player_;
+    AIPlayer AIPlayer_;
+    Menu menu_, menuAi_, menuSetting_;
+    Board board_;
+    Setting setting_;
+    bool gameDeath_;
+    bool startAiGame_;
+};

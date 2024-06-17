@@ -1,17 +1,17 @@
 #pragma once
-#ifndef SETTING_HPP
-#define SETTING_HPP
 
-#include <iostream>
+#include <cstddef>
+#include <fstream>
+#include <string>
 
 class Setting {
 public:
     Setting();
 
-    void changeLanguage() noexcept;
-    std::string getLanguage();
+    void changeLanguage();
+    std::string getLanguage()const noexcept;
 
-    char getSelectSymbolForAi() const;
+    char getSelectSymbolForAi();
     char& symbol();
 
     std::size_t& limitMove();
@@ -19,13 +19,16 @@ public:
     std::size_t& cheatMode();
     std::size_t& coin();
 
+    void loadRandomSelectSymbol()noexcept;
+
 private:
     std::string language_;
+
     char selectSymbol_;
+    char supportSelectSymbol_;
+
     std::size_t limitMove_;
     std::size_t boardSize_;
     std::size_t cheatMode_;
     std::size_t coin_;
 };
-
-#endif // SETTING_HPP

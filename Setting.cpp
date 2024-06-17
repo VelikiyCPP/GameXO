@@ -1,23 +1,46 @@
+#include <fstream>
+#include <iostream>
+#include <string>
+
 #include "Setting.hpp"
 
+std::string getTextFromFile()noexcept {
+    std::string text;
 
-Setting::Setting()
-    : language_("en"), selectSymbol_('X'), limitMove_(10), boardSize_(3),
-    cheatMode_(0), coin_(100) {}
+    std::ifstream file("Data/select_language.info");
+    std::getline(file, text);
 
-void Setting::changeLanguage() noexcept {
-    language_ == "en" ? language_ = "ru" : language_ = "en";
+    return text;
 }
 
-std::string Setting::getLanguage() {
+Setting::Setting()
+    : language_(getTextFromFile()), selectSymbol_('X'), limitMove_(10), boardSize_(3),
+    cheatMode_(0), coin_(100) {}
+
+void Setting::changeLanguage() {
+    std::string filePath = "Data/select_language.info";
+
+    std::fstream file(filePath, std::ios::trunc | std::ios::in | std::ios::out);
+
+    if (file.is_open()) {
+        language_ == "en" ? language_ = "ru" : language_ = "en";
+
+        file << language_;
+        file.seekg(0);
+        std::getline(file, language_);
+
+        file.close();
+        return;
+    }
+
+    throw std::runtime_error("Failed to open select language file");
+}
+
+std::string Setting::getLanguage()const noexcept {
     return language_;
 }
 
-char Setting::getSelectSymbolForAi() const {
-    if (selectSymbol_ == 'R') {
-        std::srand(static_cast<unsigned int>(std::time(0)));
-        return std::rand() % 2 == 0 ? 'X' : 'O';
-    }
+char Setting::getSelectSymbolForAi() {
     return (selectSymbol_ == 'X' ? 'O' : 'X');
 }
 
@@ -39,4 +62,11 @@ std::size_t& Setting::cheatMode() {
 
 std::size_t& Setting::coin() {
     return coin_;
+}
+
+void Setting::loadRandomSelectSymbol()noexcept
+{
+    if (supportSelectSymbol_ == 'R') {
+        rand() % 2 == 0 ? selectSymbol_ = 'O' : selectSymbol_ = 'X';
+    }
 }

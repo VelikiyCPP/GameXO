@@ -1,5 +1,5 @@
 #include "Player.hpp"
-#include "OutputInformation.hpp" // Include the OutputInformation header file
+#include "OutputInformation.hpp"
 
 std::size_t Player::userInput(std::string messageBeforeCin) noexcept {
     std::size_t userInputValue;
@@ -10,9 +10,7 @@ std::size_t Player::userInput(std::string messageBeforeCin) noexcept {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        OI::OutputInformation diac(false); // Create an instance of OutputInformation
-        diac.messageFromGame(OI::typeMessage::WARNING,
-            "Wrong input. Try again");
+        OutputInformation().messageFromGame(typeMessage::WARNING, "Wrong input. Try again");
 
         std::cout << messageBeforeCin;
         std::cin >> userInputValue;
