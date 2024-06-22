@@ -15,6 +15,7 @@ Game::Game() : AIPlayer_(board_) {
 }
 
 void Game::loadAllMenu() {
+    
     menu_.push_back(MenuItem("1. " + getJsonText("local_start_game_ai")));
     menu_.push_back(MenuItem("2. " + getJsonText("setting")));
     menu_.push_back(MenuItem("3. " + getJsonText("exit")));
@@ -23,13 +24,13 @@ void Game::loadAllMenu() {
     menuAi_.push_back(MenuItem("2. " + getJsonText("middle_ai")));
     menuAi_.push_back(MenuItem("3. " + getJsonText("exit")));
 
-    menuSetting_.push_back(MenuItem("1. " + getJsonText("coins_count") + " - ", setting_.coin()));
-    menuSetting_.push_back(MenuItem("2. " + getJsonText("choose_symbol") + " - ", setting_.symbol()));
-    menuSetting_.push_back(MenuItem("3. " + getJsonText("turn_limit") + " - ", setting_.limitMove()));
-    menuSetting_.push_back(MenuItem("4. " + getJsonText("board_size") + " - ", setting_.boardSize()));
-    menuSetting_.push_back(MenuItem("5. " + getJsonText("cheats_mod") + " - ", setting_.cheatMode()));
-    menuSetting_.push_back(MenuItem("6. " + getJsonText("language") + " - ", setting_.getLanguage() == "ru" ? "русский" : "english"));
-    menuSetting_.push_back(MenuItem("7. " + getJsonText("exit")));
+    menuSetting_.push_back(MenuItem(getJsonText("coins_count") + " - ", setting_.coin()));
+    menuSetting_.push_back(MenuItem("1. " + getJsonText("choose_symbol") + " - ", (setting_.supportSelectSymbol() != 'R' ? std::string(1, setting_.symbol()) : "X/O")));
+    menuSetting_.push_back(MenuItem("2. " + getJsonText("turn_limit") + " - ", setting_.limitMove()));
+    menuSetting_.push_back(MenuItem("3. " + getJsonText("board_size") + " - ", setting_.boardSize()));
+    //menuSetting_.push_back(MenuItem("4. " + getJsonText("cheats_mod") + " - ", setting_.cheatMode()));
+    menuSetting_.push_back(MenuItem("4. " + getJsonText("language") + " - ", setting_.getLanguage() == "ru" ? "ru" : "en"));
+    menuSetting_.push_back(MenuItem("5. " + getJsonText("exit")));
 }
 
 void Game::updateAllMenu() {
@@ -92,33 +93,37 @@ void Game::startLocalGame() {
     }
 
     if (startAiGame_) {
+        if (setting_.supportSelectSymbol() == 'R') {
+            setting_.loadRandomSelectSymbol();
+        }
+
         std::string text;
         std::pair<std::size_t, std::size_t> placeValue;
         bool move = setting_.symbol() == 'X' ? true : false;
 
         outputInformation.messageJson("start_local_game", 500);
-        setting_.loadRandomSelectSymbol();
 
         while (startAiGame_) {
             board_.printBoard();
+
             if (move) {
                 placeValue.first = player_.userInput("Your move(0-9): ");
-
-                if (!(placeValue.first >= 1 && placeValue.first <= 9)) {
-                    outputInformation.messageFromGame(typeMessage::WARNING, "Wrong input. Try again", 0);
-                    continue;
-                }
 
                 --placeValue.first;
                 placeValue = { placeValue.first / 3, placeValue.first % 3 };
 
-                board_.makeMove(placeValue.first, placeValue.second, setting_.symbol());
-                board_.minusAllHealthByte(setting_.symbol());
+                if (!board_.makeMove(placeValue.first, placeValue.second, setting_.symbol())) {
+                    clear();
+                    outputInformation.messageFromGame(typeMessage::WARNING, "Wrong input. Try again", 0);
+                    continue;
+                }
 
+                board_.minusAllHealthByte(setting_.symbol());
+                
                 if (board_.isWinner(setting_.symbol())) {
                     clear();
                     board_.printBoard();
-                    std::cout << "\033[1;32m" << "You win!" << "\033[0m" << std::endl;
+                    outputInformation.messageFromGame(typeMessage::INFO, "\033[1;32m You win! \033[0m", 555);
                     break;
                 }
 
@@ -127,11 +132,12 @@ void Game::startLocalGame() {
                 placeValue = AIPlayer_.selectMoveAi(AIPlayer_.getLevel());
 
                 board_.makeMove(placeValue.first, placeValue.second, setting_.getSelectSymbolForAi());
+                
                 board_.minusAllHealthByte(setting_.getSelectSymbolForAi());
 
                 if (board_.isWinner(setting_.getSelectSymbolForAi())) {
                     board_.printBoard();
-                    std::cout << "\033[1;31m" << "AI winers" << "\033[0m" << std::endl;
+                    outputInformation.messageFromGame(typeMessage::INFO, "\033[1;31m AI win! \033[0m", 555);
                     break;
                 }
             }
@@ -149,30 +155,29 @@ void Game::settingMenu() {
         menuSetting_.showAllMenu();
         switch (player_.userInput()) {
         case 1:
-            if (setting_.symbol() == 'X') {
+            if (setting_.supportSelectSymbol() == 'X') {
                 setting_.symbol() = 'O';
+                setting_.supportSelectSymbol() = 'O';
             }
-            else if (setting_.symbol() == 'O') {
-                setting_.symbol() = 'R';
+            else if (setting_.supportSelectSymbol() == 'O') {
+                setting_.supportSelectSymbol() = 'R';
             }
             else {
                 setting_.symbol() = 'X';
+                setting_.supportSelectSymbol() = 'X';
             }
-
+            updateAllMenu();
             break;
         case 2:
             break;
         case 3:
             break;
         case 4:
-            break;
-        case 5:
-            
             setting_.changeLanguage();
             outputInformation.setLanguage(setting_.getLanguage());
             updateAllMenu();
             break;
-        case 6:
+        case 5:
             isActiveSettingMenu = false;
             break;
         }

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Board.hpp"
 
 Board::Board() {
@@ -28,7 +30,7 @@ void Board::printBoard() const noexcept {
 }
 
 bool Board::isValidMove(const std::size_t row, const std::size_t col) noexcept {
-    return row < 3 && col < 3 && board_[row][col].byte_ == '-';
+    return row < 3 && row >= 0 && col < 3 && col >= 0 && board_[row][col].byte_ == '-';
 }
 
 bool Board::makeMove(const std::size_t row, const std::size_t col,
@@ -40,11 +42,19 @@ bool Board::makeMove(const std::size_t row, const std::size_t col,
     return false;
 }
 
+bool Board::isFree(const std::size_t y, const std::size_t x) const noexcept {
+    if (board_[y][x].byte_ == '-') {
+        return true;
+    }
+
+    return false;
+}
+
 bool Board::isWinner(const char symbol) noexcept {
     // проверка по строкам
-    for (const auto& row : board_) {
-        if (row[0].byte_ == symbol && row[1].byte_ == symbol &&
-            row[2].byte_ == symbol) {
+    for (const auto& rows : board_) {
+        if (rows[0].byte_ == symbol && rows[1].byte_ == symbol &&
+            rows[2].byte_ == symbol) {
             clearBoard();
             return true;
         }
@@ -72,8 +82,8 @@ bool Board::isWinner(const char symbol) noexcept {
 }
 
 void Board::clearBoard() {
-    for (auto& row : board_) {
-        for (auto& cell : row) {
+    for (auto& rows : board_) {
+        for (auto& cell : rows) {
             cell.byte_ = '-';
             cell.health_ = 4;
         }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include <iostream>
+#include <cstddef>
 
 class Board {
 public:
@@ -9,6 +9,7 @@ public:
     void printBoard() const noexcept;
     bool isValidMove(const std::size_t row, const std::size_t col) noexcept;
     bool makeMove(const std::size_t row, const std::size_t col, const char symbol) noexcept;
+    bool isFree(const std::size_t y, const std::size_t x) const noexcept;
     bool isWinner(const char symbol) noexcept;
     void clearBoard();
     void minusAllHealthByte(const char byte) noexcept;

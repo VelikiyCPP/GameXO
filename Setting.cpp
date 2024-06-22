@@ -15,7 +15,7 @@ std::string getTextFromFile()noexcept {
 
 Setting::Setting()
     : language_(getTextFromFile()), selectSymbol_('X'), limitMove_(10), boardSize_(3),
-    cheatMode_(0), coin_(100) {}
+    cheatMode_(0), coin_(100), supportSelectSymbol_(selectSymbol_) {}
 
 void Setting::changeLanguage() {
     std::string filePath = "Data/select_language.info";
@@ -48,6 +48,11 @@ char& Setting::symbol() {
     return selectSymbol_;
 }
 
+char& Setting::supportSelectSymbol()
+{
+    return supportSelectSymbol_;
+}
+
 std::size_t& Setting::limitMove() {
     return limitMove_;
 }
@@ -66,7 +71,5 @@ std::size_t& Setting::coin() {
 
 void Setting::loadRandomSelectSymbol()noexcept
 {
-    if (supportSelectSymbol_ == 'R') {
-        rand() % 2 == 0 ? selectSymbol_ = 'O' : selectSymbol_ = 'X';
-    }
+    selectSymbol_ = (rand() % 2 == 0) ? 'O' : 'X';
 }

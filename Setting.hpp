@@ -13,6 +13,7 @@ public:
 
     char getSelectSymbolForAi();
     char& symbol();
+    char& supportSelectSymbol();
 
     std::size_t& limitMove();
     std::size_t& boardSize();
