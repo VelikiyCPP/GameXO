@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 #include "MenuItem.hpp"
 
 class Menu {
