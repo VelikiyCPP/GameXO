@@ -2,7 +2,6 @@
 
 #include <ctime>
 #include <string>
-#include <nlohmann/json.hpp>
 
 enum class typeMessage : std::size_t {
     ERROR,
