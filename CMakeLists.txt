@@ -5,7 +5,7 @@ project(GameXO)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/code)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/code/cpp)
 
 add_executable(${PROJECT_NAME}
   ${SOURCE_DIR}/main.cpp
