@@ -1,3 +1,7 @@
+#include <chrono>
+#include <random>
+#include <thread>
+
 #include "../hpp/AIPlayer.hpp"
 
 AIPlayer::AIPlayer(Board& board) : board_(&board), level_(1) {}
