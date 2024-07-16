@@ -14,8 +14,8 @@ std::string getTextFromFile()noexcept {
 }
 
 Setting::Setting()
-    : language_(getTextFromFile()), selectSymbol_('X'), limitMove_(10), boardSize_(3),
-    cheatMode_(0), coin_(100), supportSelectSymbol_(selectSymbol_) {}
+    : language_(getTextFromFile()), selectSymbol_('X'), selectLimit_(999), limitCount_(selectLimit_), boardSize_(3),
+                                    supportSelectSymbol_(selectSymbol_), selectJsonTextCount(0) {}
 
 void Setting::changeLanguage() {
     std::string filePath = "Data/select_language.info";
@@ -40,6 +40,10 @@ std::string Setting::getLanguage()const noexcept {
     return language_;
 }
 
+std::string Setting::getMode()const noexcept {
+    return selectJsonText[selectJsonTextCount];
+}
+
 char Setting::getSelectSymbolForAi() {
     return (selectSymbol_ == 'X' ? 'O' : 'X');
 }
@@ -53,23 +57,50 @@ char& Setting::supportSelectSymbol()
     return supportSelectSymbol_;
 }
 
-std::size_t& Setting::limitMove() {
-    return limitMove_;
+std::size_t& Setting::limitCount() {
+    return limitCount_;
 }
 
 std::size_t& Setting::boardSize() {
     return boardSize_;
 }
 
-std::size_t& Setting::cheatMode() {
-    return cheatMode_;
+
+
+void Setting::setNewLimit()noexcept {
+    switch (selectLimit_)
+    {
+    case 5:
+        selectLimit_ = 10;
+        break;
+    case 10:
+        selectLimit_ = 20;
+        break;
+    case 20:
+        selectLimit_ = 25;
+        break;
+    case 25:
+        selectLimit_ = 999;
+        break;
+    case 999:
+        selectLimit_ = 5;
+        break;
+    default:
+        break;
+    }
 }
 
-std::size_t& Setting::coin() {
-    return coin_;
+void Setting::newMode()noexcept {
+    if(selectJsonTextCount++ == 1){
+        selectJsonTextCount = 0;
+    }
 }
 
 void Setting::loadRandomSelectSymbol()noexcept
 {
     selectSymbol_ = (rand() % 2 == 0) ? 'O' : 'X';
+}
+
+std::size_t Setting::getSelectLimit()const noexcept {
+    return selectLimit_;
 }

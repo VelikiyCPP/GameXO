@@ -17,4 +17,5 @@ add_executable(${PROJECT_NAME}
   ${SOURCE_DIR}/OutputInformation.cpp
   ${SOURCE_DIR}/Player.cpp
   ${SOURCE_DIR}/Setting.cpp
+  ${SOURCE_DIR}/SaveProcess.cpp
 )

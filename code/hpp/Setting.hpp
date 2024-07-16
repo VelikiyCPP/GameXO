@@ -10,17 +10,23 @@ public:
 
     void changeLanguage();
     std::string getLanguage()const noexcept;
+    std::string getMode()const noexcept;
+
+    std::size_t  getSelectLimit()const noexcept;
 
     char getSelectSymbolForAi();
     char& symbol();
     char& supportSelectSymbol();
 
-    std::size_t& limitMove();
+    std::size_t& limitCount();
     std::size_t& boardSize();
-    std::size_t& cheatMode();
-    std::size_t& coin();
+
+    void         setNewLimit()noexcept;
 
     void loadRandomSelectSymbol()noexcept;
+    void newMode()noexcept;
+
+    
 
 private:
     std::string language_;
@@ -28,8 +34,12 @@ private:
     char selectSymbol_;
     char supportSelectSymbol_;
 
-    std::size_t limitMove_;
+    std::size_t limitCount_;
+    std::size_t selectLimit_;
     std::size_t boardSize_;
-    std::size_t cheatMode_;
-    std::size_t coin_;
+
+    std::string selectJsonText[2] {"classic_mode", "survival_mode"};
+    short int   selectJsonTextCount;
 };
+
+//selectJsonText[selectJsonTextCount];

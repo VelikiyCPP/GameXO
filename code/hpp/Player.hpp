@@ -8,10 +8,10 @@ class Player {
 public:
 	Player() {}
 
-	std::size_t userInput(std::string messageBeforeCin = "=: ")noexcept;
+	[[nodiscard]] std::size_t userInput(std::string messageBeforeCin = "=: ")noexcept;
 
 	~Player() {}
 
 private:
-	// No private members for now
+	char symbol_;
 };

@@ -7,7 +7,7 @@
 
 #include "../hpp/OutputInformation.hpp"
 
-void OutputInformation::messageFromGame(const typeMessage messageType, const std::string& message, const std::time_t time) const noexcept {
+void OutputInformation::messageFromGame(const typeMessage& messageType, const std::string& message, const std::time_t time) const noexcept {
 
     std::string injectText;
 
@@ -73,25 +73,25 @@ void OutputInformation::messageFromGame(const nlohmann::json& messageJson) const
 
     switch (messageType) {
     case typeMessage::ERROR:
-        injectText = "\033[1;31m[ERROR]:   "; // ������� ����
+        injectText = "\033[1;31m[ERROR]:   ";
         break;
     case typeMessage::INFO:
-        injectText = "\033[1;35m[INFO]:    "; // ����� ����
+        injectText = "\033[1;35m[INFO]:    ";
         break;
     case typeMessage::WARNING:
-        injectText = "\033[1;33m[WARNING]: "; // ������ ����
+        injectText = "\033[1;33m[WARNING]: ";
         break;
     case typeMessage::SUCCESS:
-        injectText = "\033[1;32m[SUCCESS]: "; // ������� ����
+        injectText = "\033[1;32m[SUCCESS]: ";
         break;
     case typeMessage::DEBUG:
-        injectText = "\033[1;97m[DEBUG]:   "; // ������-����� ����
+        injectText = "\033[1;97m[DEBUG]:   ";
         break;
     case typeMessage::SYSTEM:
-        injectText = "\033[3;94m[SYSTEM]:   "; // ������-����� ����
+        injectText = "\033[3;94m[SYSTEM]:   ";
         break;
     default:
-        injectText = "\033[1;91m[UNKOWN]:  "; // ������-������� ����
+        injectText = "\033[1;91m[UNKOWN]:  ";
         break;
     }
 
@@ -103,7 +103,7 @@ void OutputInformation::messageFromGame(const nlohmann::json& messageJson) const
         messageText = "Unknown message";
     }
 
-    std::cout << injectText << "\033[0m" << messageText << "\n";    
+    std::cout << injectText << "\033[0m" << messageText << '\n'; 
         
     if (messageJson.find("time") != messageJson.end()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<std::time_t>(messageJson["time"])));
@@ -134,7 +134,7 @@ void OutputInformation::loadMessages(const std::string& language) {
     }
 }
 
-void OutputInformation::messageJson(const std::string& key, const std::time_t time, const typeMessage type) noexcept {
+void OutputInformation::messageJson(const std::string& key, const std::time_t time, const typeMessage& type) noexcept {
     nlohmann::json messageJson;
     nlohmann::json messages = messages_[language_];
 
@@ -164,5 +164,6 @@ std::string OutputInformation::getTextFromJson(const std::string& key) {
             return messages[key]["text"];
         }
     }
+
     return "Unknown message: " + key;
 }

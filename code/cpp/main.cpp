@@ -1,7 +1,7 @@
-#include "../hpp/Game.hpp"
-
 #include <iostream>
 #include <exception>
+
+#include "../hpp/Game.hpp"
 
 int main()
 {
